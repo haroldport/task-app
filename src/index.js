@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import ReactDOM from 'react-dom'
 import '@atlaskit/css-reset'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
@@ -10,6 +10,14 @@ import Column from './Column'
 const Container = styled.div`
     display: flex;
 `
+
+class InnerList extends PureComponent {
+    render() {
+        const { column, taskMap, index } = this.props
+        const tasks = column.taskIds.map(taskId => taskMap[taskId])
+        return <Column column={column} tasks={tasks} index={index} />
+    }
+}
 
 class App extends Component {
     state = initialData
@@ -36,7 +44,7 @@ class App extends Component {
             return
         }
 
-        if(type === 'column') {
+        if (type === 'column') {
             const newColumnOrder = Array.from(this.state.columnOrder)
             newColumnOrder.splice(source.index, 1)
             newColumnOrder.splice(destination.index, 0, draggableId)
@@ -108,9 +116,9 @@ class App extends Component {
                 onDragStart={this.onDragStart}
                 onDragEnd={this.onDragEnd}
             >
-                <Droppable 
-                    droppableId="all-columns" 
-                    direction="horizontal" 
+                <Droppable
+                    droppableId="all-columns"
+                    direction="horizontal"
                     type="column"
                 >
                     {
@@ -122,14 +130,15 @@ class App extends Component {
                                 {
                                     columnOrder.map((columnId, index) => {
                                         const column = columns[columnId]
-                                        const tasksByColumn = column.taskIds.map(taskId => tasks[taskId])
 
-                                        return (<Column
-                                            key={column.id}
-                                            column={column}
-                                            tasks={tasksByColumn}
-                                            index={index}
-                                        />)
+                                        return (
+                                            <InnerList
+                                                key={column.id}
+                                                column={column}
+                                                taskMap={tasks}
+                                                index={index}
+                                            />
+                                        )
                                     })
                                 }
                                 {provided.placeholder}

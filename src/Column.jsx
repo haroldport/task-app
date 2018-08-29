@@ -19,10 +19,28 @@ const Title = styled.h3`
 const TaskList = styled.div`
     padding: 8px;
     transition: background-color 0.2s ease;
-    background-color: ${props => (props.isDraggingOver ? 'skyblue' : 'inherit')};
+    background-color: ${props => (props.isDraggingOver ? 'lightgrey' : 'inherit')};
     flex-grow: 1;
     min-height: 100px;
 `
+
+class InnerList extends Component {
+    shouldComponentUpdate(nextProps) {
+        return nextProps.tasks !== this.props.tasks
+    }
+
+    render() {
+        const { tasks } = this.props
+
+        return tasks.map((task, index) => (
+            <Task 
+                key={task.id} 
+                index={index} 
+                task={task}
+            />
+        ))
+    }
+}
 
 export default class Column extends Component {
     render() {
@@ -47,7 +65,7 @@ export default class Column extends Component {
                                             {...provided.droppableProps}
                                             isDraggingOver={snapshot.isDraggingOver}
                                         >
-                                            {tasks.map((task, index) => <Task key={task.id} index={index} task={task} />)}
+                                            <InnerList tasks={tasks} />
                                             {provided.placeholder}
                                         </TaskList>
                                     )
