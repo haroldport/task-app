@@ -33,6 +33,7 @@ export default class Task extends Component {
                             {...provided.dragHandleProps}
                             innerRef={provided.innerRef}
                             isDragging={snapshot.isDragging}
+                            area-roledescription="Press space bar to lift the task"
                         >
                             {task.content}
                         </Container>
