@@ -88,7 +88,7 @@ class App extends Component {
 
     render() {
 
-        const { columnOrder, columns, tasks, homeIndex } = this.state
+        const { columnOrder, columns, tasks } = this.state
 
         return (
             <DragDropContext 
@@ -101,13 +101,10 @@ class App extends Component {
                             const column = columns[columnId]
                             const tasksByColumn = column.taskIds.map(taskId => tasks[taskId])
 
-                            const isDropDisabled = index < homeIndex
-
                             return (<Column 
                                         key={column.id} 
                                         column={column} 
                                         tasks={tasksByColumn} 
-                                        isDropDisabled={isDropDisabled} 
                                     />)
                         })
                     }
